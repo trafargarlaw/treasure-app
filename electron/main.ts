@@ -107,7 +107,6 @@ function createWindow() {
   });
   win.setAlwaysOnTop(true, "screen-saver");
 
-  win.webContents.openDevTools();
 
   // Test active push message to Renderer-process.
   win.webContents.on("did-finish-load", () => {
