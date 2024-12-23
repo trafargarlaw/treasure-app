@@ -4,8 +4,7 @@ import { createRequire } from "node:module";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
-
- createRequire(import.meta.url);
+createRequire(import.meta.url);
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 // The built directory structure
@@ -23,7 +22,7 @@ process.env.APP_ROOT = path.join(__dirname, "..");
 export const VITE_DEV_SERVER_URL = process.env["VITE_DEV_SERVER_URL"];
 export const MAIN_DIST = path.join(process.env.APP_ROOT, "dist-electron");
 
-export const RENDERER_DIST = app.isPackaged 
+export const RENDERER_DIST = app.isPackaged
   ? path.join(process.resourcesPath, "app.asar/dist") // Updated path for production
   : path.join(process.env.APP_ROOT, "dist");
 
@@ -92,12 +91,11 @@ ipcMain.handle("delete-token", async () => {
   }
 });
 
-
 function createWindow() {
   win = new BrowserWindow({
     icon: app.isPackaged
-      ? path.join(process.resourcesPath, "app.asar/dist", "electron-vite.svg") // Updated icon path
-      : path.join(process.env.VITE_PUBLIC, "electron-vite.svg"),
+      ? path.join(process.resourcesPath, "app.asar/dist", "icon.png") // Updated icon path
+      : path.join(process.env.VITE_PUBLIC, "icon.png"),
     webPreferences: {
       preload: path.join(__dirname, "preload.mjs"),
       nodeIntegration: true,

@@ -81,6 +81,9 @@
     "files": [
       "dist/**/*",
       "dist-electron/**/*"
-    ]
+    ],
+    "win": {
+      "icon": "./public/icon.ico"
+    }
   }
 }
