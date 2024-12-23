@@ -109,8 +109,8 @@ function Index() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-emerald-50 to-teal-100 p-6">
-      <div className="max-w-4xl mx-auto space-y-6">
+    <div className="min-h-screen bg-gradient-to-b from-emerald-50 to-teal-100 p-4">
+      <div className="max-w-4xl mx-auto space-y-2">
         <div className="grid md:grid-cols-2 gap-6">
           {/* Position Card */}
           <Card>
@@ -205,7 +205,29 @@ function Index() {
                 </Button>
               </PopoverTrigger>
               <PopoverContent className="w-[200px] p-0">
-                <Command>
+                <Command
+              filter={(value, search) => {
+                // Remove accents and special characters
+                const normalizeStr = (str: string) => 
+                  str.normalize("NFD")
+                     .replace(/[\u0300-\u036f]/g, "")
+                     .toLowerCase()
+                     .replace(/\s+/g, "");
+
+                const normalizedValue = normalizeStr(value);
+                const normalizedSearch = normalizeStr(search);
+
+                // Check if the normalized search is a subsequence of normalized value
+                let j = 0;
+                for (let i = 0; i < normalizedValue.length && j < normalizedSearch.length; i++) {
+                  if (normalizedValue[i] === normalizedSearch[j]) {
+                    j++;
+                  }
+                  }
+                  return j === normalizedSearch.length ? 1 : 0;
+                }}
+
+                >
                   <CommandInput placeholder="Search hint..." />
                   <CommandList>
                     <CommandEmpty>No hint found.</CommandEmpty>

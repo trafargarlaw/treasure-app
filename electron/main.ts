@@ -100,6 +100,7 @@ function createWindow() {
     height: 680,
     alwaysOnTop: true,
   });
+  win.setAlwaysOnTop(true, 'screen-saver');
 
   win.webContents.openDevTools();
 
