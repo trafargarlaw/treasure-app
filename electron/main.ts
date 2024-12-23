@@ -4,7 +4,8 @@ import { createRequire } from "node:module";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
-createRequire(import.meta.url);
+
+ createRequire(import.meta.url);
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 // The built directory structure
@@ -21,7 +22,10 @@ process.env.APP_ROOT = path.join(__dirname, "..");
 // 🚧 Use ['ENV_NAME'] avoid vite:define plugin - Vite@2.x
 export const VITE_DEV_SERVER_URL = process.env["VITE_DEV_SERVER_URL"];
 export const MAIN_DIST = path.join(process.env.APP_ROOT, "dist-electron");
-export const RENDERER_DIST = path.join(process.env.APP_ROOT, "dist");
+
+export const RENDERER_DIST = app.isPackaged 
+  ? path.join(process.resourcesPath, "app.asar/dist") // Updated path for production
+  : path.join(process.env.APP_ROOT, "dist");
 
 process.env.VITE_PUBLIC = VITE_DEV_SERVER_URL
   ? path.join(process.env.APP_ROOT, "public")
@@ -88,19 +92,23 @@ ipcMain.handle("delete-token", async () => {
   }
 });
 
+
 function createWindow() {
   win = new BrowserWindow({
-    icon: path.join(process.env.VITE_PUBLIC, "electron-vite.svg"),
+    icon: app.isPackaged
+      ? path.join(process.resourcesPath, "app.asar/dist", "electron-vite.svg") // Updated icon path
+      : path.join(process.env.VITE_PUBLIC, "electron-vite.svg"),
     webPreferences: {
       preload: path.join(__dirname, "preload.mjs"),
       devTools: true,
       nodeIntegration: true,
     },
-    width: 440,
+    width: 320,
     height: 680,
     alwaysOnTop: true,
+    maxHeight: 800,
   });
-  win.setAlwaysOnTop(true, 'screen-saver');
+  win.setAlwaysOnTop(true, "screen-saver");
 
   win.webContents.openDevTools();
 
@@ -112,8 +120,9 @@ function createWindow() {
   if (VITE_DEV_SERVER_URL) {
     win.loadURL(VITE_DEV_SERVER_URL);
   } else {
-    // win.loadFile('dist/index.html')
-    win.loadFile(path.join(RENDERER_DIST, "index.html"));
+    const finalPath = path.join(RENDERER_DIST, "index.html");
+
+    win.loadFile(finalPath);
   }
 }
 

@@ -1,13 +1,13 @@
 module.exports = {
   treasure: {
-    input: "http://localhost:8000/api/v1/openapi",
+    input: "https://treasure-api-production.up.railway.app/api/v1/openapi",
 
     output: {
       mode: "single",
       client: "react-query",
       target: "src/gen/endpoints",
       schemas: "src/gen/models",
-      baseUrl: "http://localhost:8000",
+      baseUrl: "https://treasure-api-production.up.railway.app",
       override: {
         mutator: {
           path: "./src/lib/axios.ts",
@@ -17,7 +17,7 @@ module.exports = {
     },
   },
   treasureZod: {
-    input: "http://localhost:8000/api/v1/openapi",
+    input: "https://treasure-api-production.up.railway.app/api/v1/openapi",
     output: {
       mode: "single",
       client: "zod",
